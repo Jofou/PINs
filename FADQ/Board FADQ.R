@@ -46,6 +46,72 @@ getwd()
 
 board_prepared %>% pin_write(centroid, "centroid")
 
+#Ajouter le code des cultures
+cultures<-readxl::read_excel("FADQ/1 Import/code culture.xlsx") %>%
+  janitor::clean_names() %>%
+  rename(culture_fadq=prox_descodprx) %>%
+  mutate(culture_fadq=stringi::stri_trans_general(culture_fadq,id = "Latin-ASCII")) %>%
+  mutate(culture_simple = case_when(
+    grepl("foin", culture_fadq) ~ "foin",
+    grepl("panic", culture_fadq) ~ "panic",
+    grepl("feverole", culture_fadq) ~ "feverole",
+    grepl("millet", culture_fadq) ~ "millet",
+    grepl("soudan", culture_fadq) ~ "soudan",
+    grepl("avoine", culture_fadq) ~ "avoine",
+    grepl("ble", culture_fadq) ~ "ble",
+    grepl("orge", culture_fadq) ~ "orge",
+    grepl("seigle", culture_fadq) ~ "seigle",
+    grepl("sarrasin", culture_fadq) ~ "sarrasin",
+    grepl("triticale", culture_fadq) ~ "triticale",
+    grepl("millet", culture_fadq) ~ "millet",
+    grepl("canola", culture_fadq) ~ "canola",
+    grepl("sorgho", culture_fadq) ~ "sorgho",
+    grepl("tournesol", culture_fadq) ~ "tournesol",
+    grepl("epeautre", culture_fadq) ~ "epeautre",
+    grepl("lin", culture_fadq) ~ "lin",
+    grepl("chanvre", culture_fadq) ~ "chanvre",
+    grepl("gazon", culture_fadq) ~ "gazon",
+    grepl("pois", culture_fadq) ~ "pois",
+    grepl("haricot", culture_fadq) ~ "haricot",
+    grepl("paturage", culture_fadq) ~ "paturage",
+    grepl("soya", culture_fadq) ~ "soya",
+    grepl("mais", culture_fadq) ~ "mais",
+    grepl("ail", culture_fadq) ~ "ail",
+    grepl("laitue", culture_fadq) ~ "laitue",
+    grepl("oignon", culture_fadq) ~ "oignon",
+    grepl("carotte", culture_fadq) ~ "carotte",
+    grepl("piment", culture_fadq) ~ "piment",
+    grepl("fraisier|fraise", culture_fadq) ~ "fraisier",
+    grepl("zucchini", culture_fadq) ~ "zucchini",
+    grepl("chou", culture_fadq) ~ "chou",
+    grepl("radis", culture_fadq) ~ "radis",
+    grepl("betterave", culture_fadq) ~ "betterave",
+    grepl("epinard", culture_fadq) ~ "epinard",
+    grepl("brocoli", culture_fadq) ~ "brocoli",
+    grepl("poireau", culture_fadq) ~ "poireau",
+    grepl("tomate", culture_fadq) ~ "tomate",
+    grepl("concombre", culture_fadq) ~ "concombre",
+    grepl("echalottes", culture_fadq) ~ "echalottes",
+    grepl("asperge", culture_fadq) ~ "asperge",
+    grepl("endive", culture_fadq) ~ "endive",
+    grepl("courge", culture_fadq) ~ "courge",
+    grepl("melon", culture_fadq) ~ "melon",
+    grepl("tabac", culture_fadq) ~ "tabac",
+    grepl("citrouille", culture_fadq) ~ "citrouille",
+    grepl("pommes de terre", culture_fadq) ~ "pommes de terre",
+    grepl("amenagement|agriculture|framboisier|framboise|pommier|bleuet|bleuetier|arbuste|arbustes|coniferes|gadellier|camerise|canneberges|vigne|poire|canneberges", culture_fadq) ~ "fruitiers et arbres",
+    grepl("jachere|non cultivee|autres|friche|semi direct", culture_fadq) ~ "non-cultive",
+    TRUE ~ as.character(.$culture_fadq))) %>%
+  select(-culture_fadq) %>%
+  rename(culture_fadq=culture_simple)
+
+
+centroid_culture<-centroid %>%
+  rename(cod=CODPRO1) %>%
+  left_join(cultures, by=c("cod")) %>%
+  select(-cod)
+
+board_prepared %>% pin_write(centroid_culture, "centroid")
 
 ## * Read Pins Validation ----
 data<-board_prepared %>%
