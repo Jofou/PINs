@@ -115,5 +115,5 @@ board_prepared %>% pin_write(centroid_culture, "centroid")
 
 ## * Read Pins Validation ----
 data<-board_prepared %>%
-  pin_read("sol_texture")
+  pin_read("centroid")
 
