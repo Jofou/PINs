@@ -109,7 +109,8 @@ cultures<-readxl::read_excel("FADQ/1 Import/code culture.xlsx") %>%
 centroid_culture<-centroid %>%
   rename(cod=CODPRO1) %>%
   left_join(cultures, by=c("cod")) %>%
-  select(-cod)
+  select(-cod) %>%
+  janitor::clean_names()
 
 board_prepared %>% pin_write(centroid_culture, "centroid")
 
