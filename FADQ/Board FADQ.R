@@ -1,41 +1,50 @@
-# CREATE BOARD SOL TYPE ----
+# CREATE BOARD FADQ ----
 
 # 1.0 LIBRARY ----
 library(pins)
 library(tidyverse)
 
-# 2.0 BOARD IMPORT ----
+# 2.0 BOARD ----
 ## * Create Board ----
-board_import <- board_folder("Type sol/1 Import/", versioned = TRUE)
+board_import <- board_folder("FADQ/1 Import/", versioned = TRUE)
 board_import
 
-# Export Prepared Data
-board_prepared <- board_folder("Type sol/2 Prepared/", versioned = TRUE)
+board_prepared <- board_folder("FADQ/2 Prepared/", versioned = TRUE)
 board_prepared
 
-## * Write Pins ----
-# Factoriser les types de sol
-#importer les séries de sol et classes texturale
-serie <- readxl::read_excel("Type sol/1 Import/Copie de Banque_donnees_sols.xls",sheet="nom_sol_complet_jointure", col_names = TRUE, col_types = NULL, skip=0) %>%
-  rename(CODECANSIS="Code sol") %>%
-  select("Nom sol", "CODECANSIS")
+## * FADQ data Base ----
+#Note: excel can open .dbf files. I opened them with excel and save them as .csv
+# setwd("FADQ/1 Import/")
+# idanpar <- list.files (pattern="^BDPPAD.*\\.csv$") %>%
+#   map_df(~data.table::fread(.,encoding = "Latin-1",select=c("AN", "IDANPAR", "CODPRO1", "SUPHEC")))
+# setwd("/Users/johaniefournier/Library/Mobile Documents/com~apple~CloudDocs/ADV/PINs")
+# getwd()
+#
+# board_prepared %>% pin_write(idanpar, "idanpar")
 
-texture <- readxl::read_excel("Type sol/1 Import/Copie de Banque_donnees_sols.xls",sheet="FCS", col_names = TRUE, col_types = NULL, skip=0) %>%
-  select("CODECANSIS", "SABLE_DEG1","LIMON_DEG1","ARGIL_DEG1", "SABLE_DEG2","LIMON_DEG2","ARGIL_DEG2", "SABLE_DEG3","LIMON_DEG3","ARGIL_DEG3")
+## * FADQ avec Centroid ----
+# C'est possible de le faire dans QGIS:
+# 1) Layer->Add Layer->Add vector Layer
+# 2) Vector->Geometry tools-> Centroid
+# 3) Dans les couches affichées dans l'écran Layer de gauche: bouton de droit sur la couche centroid->Save as csv, spécifier le nom et l'emplacement de la sauvegarde et AB_XY
 
-sol_texture<-serie %>%
-  left_join(texture, by="CODECANSIS") %>%
-  filter(!is.na(SABLE_DEG1)) %>%
-  mutate(sable =SABLE_DEG1*0.6+SABLE_DEG2*0.4,
-         limon=LIMON_DEG1*0.6+LIMON_DEG2*0.4,
-         argile=ARGIL_DEG1*0.6+ARGIL_DEG2*0.4) %>%
-  rename(type_sol="Nom sol") %>%
-  select("type_sol", "sable", "limon", "argile") %>%
-  unique()
+#C'est aussi possible de faire la même chose dans R
+#importer le nouveau .shp
+shape<- sf::read_sf(dsn = "FADQ/1 Import/BDPPAD_v03_2021/", layer = "BDPPAD_v03_AN_2021_s_20220322")
+#Identifier les centroides
+centroid_shape<-sf::st_centroid(shape) %>%
+  sf::st_transform(., '+proj=longlat +ellps=GRS80 +no_defs')
+#enregistrer la base de données
+sf::st_write(centroid_shape, "FADQ/1 Import/st_centroid_shape_2021.csv", layer_options="GEOMETRY=AS_XY")
 
-## * Write Pins ----
-#Pin prepared Data here because processing already done before pinning strategy
-board_prepared %>% pin_write(sol_texture, "sol_texture")
+#Regrouper tous les centroides
+setwd("FADQ/1 Import/")
+centroid <- list.files (pattern="^st_centroid_shape.*\\.csv$") %>%
+  map_df(~data.table::fread(.,encoding = "Latin-1",select=c("X", "Y", "AN", "IDANPAR", "CODPRO1", "SUPHEC")))
+setwd("/Users/johaniefournier/Library/Mobile Documents/com~apple~CloudDocs/ADV/PINs")
+getwd()
+
+board_prepared %>% pin_write(centroid, "centroid")
 
 
 ## * Read Pins Validation ----
