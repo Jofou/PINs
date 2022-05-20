@@ -123,7 +123,7 @@ data<-board_prepared %>%
 
 data_clean<-data %>%
   filter(!is.na(culture_fadq)) %>%
-  mutate(groupe = case_when(
+  mutate(culture = case_when(
     grepl("foin|panic|feverole|semis direct",culture_fadq) ~ "hay",
     grepl("avoine|ble|orge|seigle|sarrasin|triticale|millet|canola|sorgho|tournesol|epeautre|lin|chanvre",culture_fadq) ~ "cereals",
     grepl("pommes de terre",culture_fadq) ~ "potato",
@@ -134,7 +134,8 @@ data_clean<-data %>%
     grepl("haricot|chou|brocoli|melon|laitue|oignon|piment|celeris|carotte|panais|radis|rutabaga|zucchini|tomate|betterave|cornichon|rabiole|endive|ail|artichaut|asperge|aubergine|poireau|fines herbes|topinambour|celeri-rave|aneth|epinard|pois|rhubarbe|citrouille|courge|concombre|chou-fleur|tabac|gourganes|echalottes|feverole|navets",culture_fadq) ~ "vegetables",
     grepl("non-cultive|tourbe|engrais vert", culture_fadq) ~ "not cultivated",
     TRUE ~ as.character(.$culture_fadq))) %>%
-  mutate(suphec_log=log(suphec))
+  mutate(suphec_log=log(suphec)) %>%
+  select(-culture_fadq)
 
 
 board_tidy %>% pin_write(data_clean, "fadq_tidy")
