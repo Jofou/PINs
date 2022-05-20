@@ -12,6 +12,9 @@ board_import
 board_prepared <- board_folder("FADQ/2 Prepared/", versioned = TRUE)
 board_prepared
 
+board_tidy <- board_folder("FADQ/3 Tidy/", versioned = TRUE)
+board_tidy
+
 ## * FADQ data Base ----
 #Note: excel can open .dbf files. I opened them with excel and save them as .csv
 # setwd("FADQ/1 Import/")
@@ -114,7 +117,24 @@ centroid_culture<-centroid %>%
 
 board_prepared %>% pin_write(centroid_culture, "centroid")
 
-## * Read Pins Validation ----
+## * FADQ Tidy dataset ----
 data<-board_prepared %>%
-  pin_read("centroid")
+  pins::pin_read("centroid")
 
+data_clean<-data %>%
+  filter(!is.na(culture_fadq)) %>%
+  mutate(groupe = case_when(
+    grepl("foin|panic|feverole|semis direct",culture_fadq) ~ "hay",
+    grepl("avoine|ble|orge|seigle|sarrasin|triticale|millet|canola|sorgho|tournesol|epeautre|lin|chanvre",culture_fadq) ~ "cereals",
+    grepl("pommes de terre",culture_fadq) ~ "potato",
+    grepl("framboisier|framboise|fraisier|fraise|pommier|bleuet|bleuetier|arbustes|coniferes|gadellier|camerise|vigne|poire|canneberges|fruitiers et arbres",culture_fadq) ~ "trees and fruits",
+    grepl("paturage",culture_fadq) ~ "pasture",
+    grepl("soya",culture_fadq) ~ "soy",
+    grepl("mais",culture_fadq) ~ "corn",
+    grepl("haricot|chou|brocoli|melon|laitue|oignon|piment|celeris|carotte|panais|radis|rutabaga|zucchini|tomate|betterave|cornichon|rabiole|endive|ail|artichaut|asperge|aubergine|poireau|fines herbes|topinambour|celeri-rave|aneth|epinard|pois|rhubarbe|citrouille|courge|concombre|chou-fleur|tabac|gourganes|echalottes|feverole|navets",culture_fadq) ~ "vegetables",
+    grepl("non-cultive|tourbe|engrais vert", culture_fadq) ~ "not cultivated",
+    TRUE ~ as.character(.$culture_fadq))) %>%
+  mutate(suphec_log=log(suphec))
+
+
+board_tidy %>% pin_write(data_clean, "fadq_tidy")

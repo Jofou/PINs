@@ -1,0 +1,8 @@
+file: fadq_tidy.rds
+file_size: 123444554
+pin_hash: b35d99120bb0b1f7
+type: rds
+title: 'fadq_tidy: a pinned 5879938 x 8 data frame'
+description: ~
+created: 20220520T165247Z
+api_version: 1.0
