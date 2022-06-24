@@ -1,3 +1,0 @@
-lfs track "*.rds"
-lfs track "*.csv"
-lfs track "*.shp"
