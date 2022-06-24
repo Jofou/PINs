@@ -36,13 +36,24 @@ board_tidy
 shape<- sf::read_sf(dsn = "FADQ/1 Import/BDPPAD_v03_2022", layer = "BDPPAD_v03_AN_2022_s_20220620")
 #Enlever les lignes ou il y a erreur dans la géometrie
 shape <- shape[-c(192614), ]
+
+shape_2022 <- shape %>%
+  janitor::clean_names() %>%
+  select(suphec, geometry)
+
+board_prepared %>% pin_write(shape_2022, "shape_2022")
+
+
 #Identifier les centroides
 centroid_shape<-sf::st_centroid(shape) %>%
-  sf::st_transform(., '+proj=longlat +ellps=GRS80 +no_defs')
-#enregistrer la base de données
-sf::st_write(centroid_shape, "FADQ/1 Import/st_centroid_shape_2022.csv", layer_options="GEOMETRY=AS_XY")
+  sf::st_transform(., '+proj=longlat +ellps=GRS80 +no_defs') %>%
+  janitor::clean_names() %>%
+select(suphec, geometry)
 
 board_prepared %>% pin_write(centroid_shape, "centroid_2022")
+
+#enregistrer la base de données
+sf::st_write(centroid_shape, "FADQ/1 Import/st_centroid_shape_2022.csv", layer_options="GEOMETRY=AS_XY")
 
 
 #Regrouper tous les centroides
