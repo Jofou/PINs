@@ -33,12 +33,17 @@ board_tidy
 
 #C'est aussi possible de faire la même chose dans R
 #importer le nouveau .shp
-shape<- sf::read_sf(dsn = "FADQ/1 Import/BDPPAD_v03_2021/", layer = "BDPPAD_v03_AN_2021_s_20220322")
+shape<- sf::read_sf(dsn = "FADQ/1 Import/BDPPAD_v03_2022", layer = "BDPPAD_v03_AN_2022_s_20220620")
+#Enlever les lignes ou il y a erreur dans la géometrie
+shape <- shape[-c(192614), ]
 #Identifier les centroides
 centroid_shape<-sf::st_centroid(shape) %>%
   sf::st_transform(., '+proj=longlat +ellps=GRS80 +no_defs')
 #enregistrer la base de données
-sf::st_write(centroid_shape, "FADQ/1 Import/st_centroid_shape_2021.csv", layer_options="GEOMETRY=AS_XY")
+sf::st_write(centroid_shape, "FADQ/1 Import/st_centroid_shape_2022.csv", layer_options="GEOMETRY=AS_XY")
+
+board_prepared %>% pin_write(centroid_shape, "centroid_2022")
+
 
 #Regrouper tous les centroides
 setwd("FADQ/1 Import/")
@@ -47,7 +52,20 @@ centroid <- list.files (pattern="^st_centroid_shape.*\\.csv$") %>%
 setwd("/Users/johaniefournier/Library/Mobile Documents/com~apple~CloudDocs/ADV/PINs")
 getwd()
 
-board_prepared %>% pin_write(centroid, "centroid")
+#Retirer les duplicata dû a la structure de la bd de la FADQ
+#GPS avec 5 décimales= précision de 1 m
+#GPS avec 4 décimales= précision de 11 m
+#GPS avec 3 décimales= précision de 111 m
+#GPS avec 2 décimales= précision de 1 111 m
+
+centroide_simple<-centroid %>%
+  mutate(latitude=round(Y, digits = 3),
+         longitude=round(X, digits = 3)) %>%
+  arrange(desc(AN)) %>%
+  select(longitude, latitude, SUPHEC) %>%
+  distinct(longitude, latitude, .keep_all = TRUE)
+
+board_prepared %>% pin_write(centroide_simple, "centroid")
 
 #Ajouter le code des cultures
 cultures<-readxl::read_excel("FADQ/1 Import/code culture.xlsx") %>%

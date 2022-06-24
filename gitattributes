@@ -1,0 +1,3 @@
+git lfs track "*.rds"
+git lfs track "*.csv"
+git lfs track "*.shp"
