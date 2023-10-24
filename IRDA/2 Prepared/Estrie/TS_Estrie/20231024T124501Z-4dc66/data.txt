@@ -1,0 +1,8 @@
+file: TS_Estrie.rds
+file_size: 35113227
+pin_hash: 4dc66b55e27f62dc
+type: rds
+title: 'TS_Estrie: a pinned 21930 x 64 data frame'
+description: ~
+created: 20231024T124501Z
+api_version: 1.0

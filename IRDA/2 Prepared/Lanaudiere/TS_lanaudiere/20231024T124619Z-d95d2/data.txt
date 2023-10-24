@@ -1,0 +1,8 @@
+file: TS_lanaudiere.rds
+file_size: 22562428
+pin_hash: d95d29c02a63b49f
+type: rds
+title: 'TS_lanaudiere: a pinned 16732 x 64 data frame'
+description: ~
+created: 20231024T124619Z
+api_version: 1.0
