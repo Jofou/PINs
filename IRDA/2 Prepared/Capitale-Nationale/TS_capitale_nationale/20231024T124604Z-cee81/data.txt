@@ -1,0 +1,8 @@
+file: TS_capitale_nationale.rds
+file_size: 19444940
+pin_hash: cee81a10f2c402bf
+type: rds
+title: 'TS_capitale_nationale: a pinned 16860 x 64 data frame'
+description: ~
+created: 20231024T124604Z
+api_version: 1.0

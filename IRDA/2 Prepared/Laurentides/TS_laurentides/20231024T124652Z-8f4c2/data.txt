@@ -1,0 +1,8 @@
+file: TS_laurentides.rds
+file_size: 45242260
+pin_hash: 8f4c2d71e000dff3
+type: rds
+title: 'TS_laurentides: a pinned 32572 x 64 data frame'
+description: ~
+created: 20231024T124652Z
+api_version: 1.0
