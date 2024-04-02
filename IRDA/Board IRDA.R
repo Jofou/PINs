@@ -71,6 +71,16 @@ test_all <- test %>%
 board_prepared %>% pin_write(test_all, "TS_Monteregie")
 #board_collab %>% pin_write(test_all, "TS_Monteregie")
 
+point<-data.frame(longitude=-73.8702492638435,
+                  latitude=45.1448364257813) %>%
+  sf::st_as_sf(coords = c("longitude", "latitude")) %>%
+  sf::st_set_crs(4326)
+
+data<-board_folder("2 Prepared/Monteregie", versioned = TRUE) %>%
+  pin_read("TS_Monteregie") %>%
+  sf::st_as_sf() %>%
+  sf::st_transform(., 4326) %>%
+  sf::st_intersection(., point)
 
 # 3.3 Estrie ----
 ## * Create Board
