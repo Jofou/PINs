@@ -1,0 +1,8 @@
+file: TS_Monteregie.rds
+file_size: 44469739
+pin_hash: d8e7ed952e465375
+type: rds
+title: 'TS_Monteregie: a pinned 30799 x 64 data frame'
+description: ~
+created: 20231122T135847Z
+api_version: 1.0
