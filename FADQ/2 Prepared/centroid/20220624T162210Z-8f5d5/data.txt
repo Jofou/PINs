@@ -1,8 +1,0 @@
-file: centroid.rds
-file_size: 3508721
-pin_hash: 8f5d55e8f8b8ea28
-type: rds
-title: 'centroid: a pinned 597712 x 3 data frame'
-description: ~
-created: 20220624T162210Z
-api_version: 1.0
