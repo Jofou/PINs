@@ -1,0 +1,10 @@
+file: TS_bas_st_laurent.rds
+file_size: 21822854
+pin_hash: f60270e58b3ca269
+type: rds
+title: 'TS_bas_st_laurent: a pinned 25177 x 62 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260511T200418Z
+api_version: 1
