@@ -1,0 +1,10 @@
+file: TS_chaudiere_appalaches.rds
+file_size: 46524651
+pin_hash: a1c4c8aa11f2f889
+type: rds
+title: 'TS_chaudiere_appalaches: a pinned 45448 x 62 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260511T195703Z
+api_version: 1
