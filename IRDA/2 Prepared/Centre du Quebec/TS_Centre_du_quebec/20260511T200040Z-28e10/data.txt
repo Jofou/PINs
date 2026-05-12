@@ -1,0 +1,10 @@
+file: TS_centre_du_quebec.rds
+file_size: 15048028
+pin_hash: 28e104e109194821
+type: rds
+title: 'TS_centre_du_quebec: a pinned 20339 x 62 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260511T200040Z
+api_version: 1

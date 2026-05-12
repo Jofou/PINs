@@ -1,0 +1,10 @@
+file: TS_mauricie.rds
+file_size: 22122573
+pin_hash: cbcea81c6eca3635
+type: rds
+title: 'TS_mauricie: a pinned 11997 x 62 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260511T195934Z
+api_version: 1

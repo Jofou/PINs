@@ -1,0 +1,10 @@
+file: TS_monteregie.rds
+file_size: 30507360
+pin_hash: d2c27435ce273534
+type: rds
+title: 'TS_monteregie: a pinned 26590 x 62 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260511T195415Z
+api_version: 1
